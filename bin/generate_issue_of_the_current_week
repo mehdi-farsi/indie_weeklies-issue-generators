@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "dotenv/load"
+require "thor"
+require "zeitwerk"
+require "fileutils"
+
+# Set up autoloading
+loader = Zeitwerk::Loader.new
+loader.push_dir(File.expand_path("../lib", __dir__))
+loader.setup
+
+module IndieWeeklies
+  class CLI < Thor
+    default_task :generate
+
+    desc "generate", "Generate the weekly newsletter"
+    def generate
+      puts "Starting Indie Weeklies issue generation..."
+      start_time = Time.now
+
+      begin
+        # Step 1: Collect tweets
+        puts "Step 1/7: Collecting tweets from your Twitter following..."
+        twitter_scraper = TwitterScraper.new
+
+        puts "  - Parsing following.html to extract Twitter usernames..."
+        following = twitter_scraper.get_following_list
+        puts "    Found #{following.size} accounts you follow."
+
+        puts "  - Scraping recent tweets from following..."
+        tweets = twitter_scraper.get_recent_tweets(following)
+        puts "    Found #{tweets.size} tweets from the past 7 days."
+
+        puts "  - Calculating engagement metrics..."
+        twitter_scraper.calculate_engagement(tweets)
+
+        puts "  - Getting top tweets per account..."
+        top_tweets_per_account = twitter_scraper.get_top_tweets_per_account(tweets)
+        puts "    Selected #{top_tweets_per_account.size} top tweets."
+
+        # Step 2: Rank tweets
+        puts "Step 2/7: Ranking tweets by engagement and follower count..."
+        ranker = TweetRanker.new
+        ranked_tweets = ranker.get_top_tweets(top_tweets_per_account)
+        puts "  - Ranked and selected top #{ranked_tweets.size} tweets."
+
+        # Step 3: Summarize tweets
+        puts "Step 3/7: Summarizing tweets with OpenAI..."
+        summarizer = TweetSummarizer.new
+        summarized_tweets = summarizer.summarize_tweets(ranked_tweets)
+
+        # Step 4: Screenshot tweets
+        puts "Step 4/7: Taking screenshots of tweets..."
+        screenshot_generator = ScreenshotGenerator.new
+        tweets_with_screenshots = screenshot_generator.generate_screenshots(summarized_tweets)
+
+        # Step 5: Scrape Product Hunt
+        puts "Step 5/7: Scraping Product Hunt weekly leaderboard..."
+        product_hunt_scraper = ProductHuntScraper.new
+        products = product_hunt_scraper.scrape_top_products(10)
+        puts "  - Found #{products.size} products on Product Hunt."
+
+        # Step 6: Compose newsletter
+        puts "Step 6/7: Composing newsletter content..."
+        composer = NewsletterComposer.new
+        newsletter = composer.compose(tweets_with_screenshots, products)
+        puts "  - Newsletter composed and saved to #{newsletter[:file_path]}"
+
+        # Step 7: Upload to Beehiiv
+        puts "Step 7/7: Uploading draft to Beehiiv..."
+        uploader = BeehiivUploader.new
+        result = uploader.upload(newsletter)
+
+        if result
+          puts "\n✅ Success! Newsletter draft created and uploaded to Beehiiv."
+          puts "Preview URL: #{result[:preview_url]}"
+          puts "Local HTML backup: #{newsletter[:file_path]}"
+        else
+          puts "\n⚠️ Newsletter draft saved locally but not uploaded to Beehiiv."
+          puts "Local HTML backup: #{newsletter[:file_path]}"
+        end
+
+        end_time = Time.now
+        duration = (end_time - start_time).to_i
+        puts "\nTotal time: #{duration} seconds (#{duration / 60} minutes, #{duration % 60} seconds)"
+      rescue StandardError => e
+        puts "\n❌ Error: #{e.message}"
+        puts e.backtrace.join("\n")
+        exit 1
+      end
+    end
+  end
+end
+
+IndieWeeklies::CLI.start(ARGV)

@@ -1,0 +1,12 @@
+{
+  "name": "indie-weeklies",
+  "version": "1.0.0",
+  "description": "CLI tool to generate weekly newsletter with top indie-hacking content",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "puppeteer-core": "^21.0.0"
+  }
+}
