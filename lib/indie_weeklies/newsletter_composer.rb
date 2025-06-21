@@ -8,30 +8,30 @@ module IndieWeeklies
   class NewsletterComposer
     TEMPLATE_DIR = File.expand_path("../templates", __dir__)
     OUTPUT_DIR = File.expand_path("../../tmp", __dir__)
-    
+
     def initialize
       FileUtils.mkdir_p(OUTPUT_DIR)
       FileUtils.mkdir_p(TEMPLATE_DIR)
       create_template_if_not_exists
     end
-    
+
     # Generate the newsletter content
     def compose(tweets, products)
       week_number = Date.today.cweek
       year = Date.today.year
-      
+
       # Generate a tagline based on the top tweet
       tagline = generate_tagline(tweets.first) if tweets.any?
-      
+
       # Render the template
       template = File.read(File.join(TEMPLATE_DIR, "newsletter_template.erb"))
       renderer = ERB.new(template)
       content = renderer.result(binding)
-      
+
       # Save to file
       output_file = File.join(OUTPUT_DIR, "indie-weeklies-#{year}-W#{week_number}.html")
       File.write(output_file, content)
-      
+
       {
         title: "Indie Weeklies – Edition #{week_number}",
         tagline: tagline,
@@ -39,9 +39,9 @@ module IndieWeeklies
         file_path: output_file
       }
     end
-    
+
     private
-    
+
     # Generate a tagline based on the top tweet
     def generate_tagline(top_tweet)
       if top_tweet && top_tweet["summary"]
@@ -50,11 +50,12 @@ module IndieWeeklies
         "The one with this week's best indie hacking content"
       end
     end
-    
+
     # Create the template file if it doesn't exist
     def create_template_if_not_exists
       template_path = File.join(TEMPLATE_DIR, "newsletter_template.erb")
-      
+      week_number = Date.today.cweek
+
       unless File.exist?(template_path)
         template_content = <<~HTML
           <!DOCTYPE html>
@@ -128,13 +129,13 @@ module IndieWeeklies
           </head>
           <body>
             <h1><%= "Indie Weeklies – Edition #{week_number}" %></h1>
-            
+
             <% if tagline %>
               <div class="tagline"><%= tagline %></div>
             <% end %>
-            
+
             <h2>💡 Indie Hacks of the Week</h2>
-            
+
             <% if tweets.any? %>
               <% tweets.each do |tweet| %>
                 <div class="tweet">
@@ -149,10 +150,10 @@ module IndieWeeklies
             <% else %>
               <p>No tweets found this week.</p>
             <% end %>
-            
+
             <div class="product-hunt">
               <h2>🚀 Product Hunt Top 10</h2>
-              
+
               <% if products.any? %>
                 <% products.each do |product| %>
                   <div class="product">
@@ -164,14 +165,14 @@ module IndieWeeklies
                 <p>No Product Hunt items found this week.</p>
               <% end %>
             </div>
-            
+
             <footer>
               <p>Indie Weeklies – Edition <%= week_number %> | <%= Date.today.strftime("%B %d, %Y") %></p>
             </footer>
           </body>
           </html>
         HTML
-        
+
         FileUtils.mkdir_p(TEMPLATE_DIR)
         File.write(template_path, template_content)
       end
