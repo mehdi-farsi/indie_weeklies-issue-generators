@@ -9,6 +9,60 @@ module IndieWeeklies
     TEMPLATE_DIR = File.expand_path("../templates", __dir__)
     OUTPUT_DIR = File.expand_path("../../tmp", __dir__)
 
+    # Glossary of indie hacking terms
+    GLOSSARY = [
+      {
+        id: "mvp",
+        term: "MVP",
+        definition: "Minimum Viable Product - the simplest version of a product that can still provide value to users."
+      },
+      {
+        id: "bootstrapping",
+        term: "Bootstrapping",
+        definition: "Building a company without external funding, using personal savings and revenue from the business."
+      },
+      {
+        id: "saas",
+        term: "SaaS",
+        definition: "Software as a Service - a software licensing model where access is provided on a subscription basis."
+      },
+      {
+        id: "cac",
+        term: "CAC",
+        definition: "Customer Acquisition Cost - the cost of acquiring a new customer, including marketing and sales expenses."
+      },
+      {
+        id: "ltv",
+        term: "LTV",
+        definition: "Lifetime Value - the total revenue a business can expect from a single customer account throughout their relationship."
+      },
+      {
+        id: "pmf",
+        term: "PMF",
+        definition: "Product-Market Fit - when a product satisfies a strong market demand."
+      },
+      {
+        id: "arpu",
+        term: "ARPU",
+        definition: "Average Revenue Per User - the revenue generated per user, typically calculated on a monthly basis."
+      },
+      {
+        id: "mrr",
+        term: "MRR",
+        definition: "Monthly Recurring Revenue - the predictable revenue a business can expect to receive every month."
+      },
+      {
+        id: "churn",
+        term: "Churn",
+        definition: "The rate at which customers stop using a product or service over a given time period."
+      },
+      {
+        id: "cro",
+        term: "CRO",
+        definition: "Conversion Rate Optimization - the process of increasing the percentage of users who take a desired action."
+      }
+    ]
+
     def initialize
       FileUtils.mkdir_p(OUTPUT_DIR)
       FileUtils.mkdir_p(TEMPLATE_DIR)
@@ -119,6 +173,32 @@ module IndieWeeklies
               a:hover {
                 text-decoration: underline;
               }
+              .glossary {
+                margin-top: 50px;
+              }
+              .glossary-entry {
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #eee;
+              }
+              .glossary-entry h3 {
+                margin-bottom: 10px;
+              }
+              .share-buttons {
+                margin-top: 15px;
+              }
+              .share-button {
+                display: inline-block;
+                padding: 5px 10px;
+                background-color: #1DA1F2;
+                color: white;
+                border-radius: 4px;
+                font-size: 0.9em;
+              }
+              .share-button:hover {
+                background-color: #0c85d0;
+                text-decoration: none;
+              }
               footer {
                 margin-top: 50px;
                 font-size: 0.9em;
@@ -163,6 +243,24 @@ module IndieWeeklies
                 <% end %>
               <% else %>
                 <p>No Product Hunt items found this week.</p>
+              <% end %>
+            </div>
+
+            <div class="glossary">
+              <h2>📚 Indie Hacking Glossary</h2>
+
+              <% GLOSSARY.each do |entry| %>
+                <div class="glossary-entry" id="<%= entry[:id] %>">
+                  <h3><%= entry[:term] %></h3>
+                  <p><%= entry[:definition] %></p>
+                  <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?url=<%= URI.encode_www_form_component("https://indieweeklies.com/glossary\##{entry[:id]}") %>&text=<%= URI.encode_www_form_component("Learn what #{entry[:term]} means in indie hacking:") %>" 
+                       target="_blank" 
+                       class="share-button">
+                      Share on X
+                    </a>
+                  </div>
+                </div>
               <% end %>
             </div>
 

@@ -9,6 +9,7 @@ A local-first CLI tool that creates and uploads a Beehiiv draft containing the p
 - Summarizes tweets using OpenAI
 - Takes screenshots of tweets using Puppeteer
 - Scrapes the Product Hunt weekly leaderboard
+- Includes an indie hacking glossary with shareable entries
 - Composes a newsletter with the content
 - Uploads the newsletter as a draft to Beehiiv
 - Saves a local HTML backup
@@ -71,9 +72,23 @@ The tool will:
 3. Summarize them with OpenAI
 4. Take screenshots of the tweets
 5. Scrape the Product Hunt weekly leaderboard
-6. Compose a newsletter with the content
-7. Upload the newsletter as a draft to Beehiiv
-8. Save a local HTML backup in the `tmp` directory
+6. Include an indie hacking glossary with 10 common terms
+7. Compose a newsletter with the content
+8. Upload the newsletter as a draft to Beehiiv
+9. Save a local HTML backup in the `tmp` directory
+
+### Glossary Feature
+
+The newsletter includes a glossary of indie hacking terms. Each glossary entry has:
+- A unique ID that serves as an anchor in the HTML
+- A term and its definition
+- A "Share on X" button that allows readers to share the specific glossary entry on X.com
+
+When a user clicks the "Share on X" button, it opens a new window with a pre-populated tweet that includes:
+- A brief message about the term
+- A link to the specific glossary entry (using the anchor)
+
+This allows readers to easily share specific terms and their definitions with their followers.
 
 ## Testing
 
@@ -92,7 +107,7 @@ The project is organized into several components:
 - `TweetSummarizer`: Summarizes tweets using OpenAI
 - `ScreenshotGenerator`: Takes screenshots of tweets using Puppeteer
 - `ProductHuntScraper`: Scrapes the Product Hunt weekly leaderboard
-- `NewsletterComposer`: Composes the newsletter content
+- `NewsletterComposer`: Composes the newsletter content, including the indie hacking glossary with shareable entries
 - `BeehiivUploader`: Uploads the newsletter to Beehiiv
 
 See `docs/decisions.md` for more details on the architecture and design decisions.

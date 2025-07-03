@@ -11,7 +11,7 @@ The application follows a modular design with each component responsible for a s
 3. **TweetSummarizer**: Handles OpenAI interactions for summarization
 4. **ScreenshotGenerator**: Manages Puppeteer for screenshots
 5. **ProductHuntScraper**: Scrapes Product Hunt leaderboard
-6. **NewsletterComposer**: Generates the newsletter content
+6. **NewsletterComposer**: Generates the newsletter content, including the indie hacking glossary with shareable entries
 7. **BeehiivUploader**: Uploads to Beehiiv API
 
 This modular approach allows for easier testing, maintenance, and future enhancements.
@@ -64,8 +64,17 @@ This modular approach allows for easier testing, maintenance, and future enhance
 - We use ERB templates for generating the HTML content.
 - The template is stored in the lib/templates directory and created if it doesn't exist.
 - We generate a tagline based on the top tweet's summary.
+- We include a glossary of indie hacking terms with shareable entries.
 
-### 8. Beehiiv Upload
+### 8. Glossary Feature
+
+- We maintain a curated list of 10 common indie hacking terms and their definitions.
+- Each glossary entry has a unique ID that serves as an HTML anchor.
+- We provide a "Share on X" button for each entry that generates a pre-populated tweet.
+- The share URL includes an anchor that directs viewers to the specific glossary entry.
+- We use Twitter's Web Intent API for sharing, which opens a new window with a pre-populated tweet.
+
+### 9. Beehiiv Upload
 
 - We upload the newsletter as a draft to Beehiiv.
 - We store a record of published editions in a YAML file to avoid duplicates.
@@ -102,3 +111,5 @@ Potential areas for future improvement:
 4. Implement a web interface for previewing and editing before publishing.
 5. Add analytics tracking for newsletter performance.
 6. Improve error handling for Twitter's changing page structure.
+7. Expand the glossary with more terms and allow users to contribute new entries.
+8. Add analytics to track which glossary entries are shared most frequently.
