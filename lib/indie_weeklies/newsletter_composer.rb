@@ -249,12 +249,12 @@ module IndieWeeklies
             <div class="glossary">
               <h2>📚 Indie Hacking Glossary</h2>
 
-              <% GLOSSARY.each do |entry| %>
-                <div class="glossary-entry" id="<%= entry[:id] %>">
-                  <h3><%= entry[:term] %></h3>
-                  <p><%= entry[:definition] %></p>
+              <% GLOSSARY.each do |glossary_entry| %>
+                <div class="glossary-entry" id="<%= glossary_entry[:id] %>">
+                  <h3><%= glossary_entry[:term] %></h3>
+                  <p><%= glossary_entry[:definition] %></p>
                   <div class="share-buttons">
-                    <a href="https://twitter.com/intent/tweet?url=<%= URI.encode_www_form_component("https://indieweeklies.com/glossary\##{entry[:id]}") %>&text=<%= URI.encode_www_form_component("Learn what #{entry[:term]} means in indie hacking:") %>" 
+                    <a href="https://twitter.com/intent/tweet?url=<%= URI.encode_www_form_component("https://indieweeklies.com/glossary\##{glossary_entry[:id]}") %>&text=<%= URI.encode_www_form_component("Learn what #{glossary_entry[:term]} means in indie hacking:") %>" 
                        target="_blank" 
                        class="share-button">
                       Share on X
