@@ -5,7 +5,7 @@ A local-first CLI tool that creates and uploads a Beehiiv draft containing the p
 ## Features
 
 - Scrapes tweets from accounts you follow on Twitter (no API needed)
-- Ranks tweets by engagement and follower count
+- Ranks tweets by engagement and account popularity score
 - Summarizes tweets using OpenAI
 - Takes screenshots of tweets using Puppeteer
 - Scrapes the Product Hunt weekly leaderboard
@@ -103,7 +103,8 @@ bundle exec rspec
 The project is organized into several components:
 
 - `TwitterScraper`: Scrapes tweets from Twitter without using the API
-- `TweetRanker`: Ranks tweets by engagement and follower count
+- `TweetRanker`: Ranks tweets by engagement and account popularity score
+- `AccountPopularity`: Provides popularity scores for Twitter accounts from indie_accounts.csv
 - `TweetSummarizer`: Summarizes tweets using OpenAI
 - `ScreenshotGenerator`: Takes screenshots of tweets using Puppeteer
 - `ProductHuntScraper`: Scrapes the Product Hunt weekly leaderboard

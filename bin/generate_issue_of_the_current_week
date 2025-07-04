@@ -42,7 +42,7 @@ module IndieWeeklies
         puts "    Selected #{top_tweets_per_account.size} top tweets."
 
         # Step 2: Rank tweets
-        puts "Step 2/7: Ranking tweets by engagement and follower count..."
+        puts "Step 2/7: Ranking tweets by engagement and account popularity..."
         ranker = TweetRanker.new
         ranked_tweets = ranker.get_top_tweets(top_tweets_per_account)
         puts "  - Ranked and selected top #{ranked_tweets.size} tweets."

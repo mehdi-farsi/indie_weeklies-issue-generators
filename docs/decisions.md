@@ -7,12 +7,13 @@ This document outlines the key architectural decisions made during the developme
 The application follows a modular design with each component responsible for a specific part of the workflow:
 
 1. **TwitterScraper**: Scrapes tweets from Twitter without using the API
-2. **TweetRanker**: Implements the ranking algorithm
-3. **TweetSummarizer**: Handles OpenAI interactions for summarization
-4. **ScreenshotGenerator**: Manages Puppeteer for screenshots
-5. **ProductHuntScraper**: Scrapes Product Hunt leaderboard
-6. **NewsletterComposer**: Generates the newsletter content, including the indie hacking glossary with shareable entries
-7. **BeehiivUploader**: Uploads to Beehiiv API
+2. **AccountPopularity**: Provides popularity scores for Twitter accounts
+3. **TweetRanker**: Implements the ranking algorithm
+4. **TweetSummarizer**: Handles OpenAI interactions for summarization
+5. **ScreenshotGenerator**: Manages Puppeteer for screenshots
+6. **ProductHuntScraper**: Scrapes Product Hunt leaderboard
+7. **NewsletterComposer**: Generates the newsletter content, including the indie hacking glossary with shareable entries
+8. **BeehiivUploader**: Uploads to Beehiiv API
 
 This modular approach allows for easier testing, maintenance, and future enhancements.
 
@@ -37,8 +38,9 @@ This modular approach allows for easier testing, maintenance, and future enhance
 
 ### 3. Ranking Algorithm
 
-- Composite score = engagement × 0.4 + author_followers × 0.6
-- This balances the importance of the tweet's popularity with the author's influence.
+- Composite score = engagement × 0.4 + account_popularity × 0.6
+- This balances the importance of the tweet's engagement with the author's popularity in the indie hacking community.
+- Account popularity scores are stored in the indie_accounts.csv file and are based on the account's relevance and influence in the indie hacking community.
 - Tweets are sorted by this score in descending order.
 
 ### 4. Tweet Summarization
